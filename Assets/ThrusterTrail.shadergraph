@@ -485,7 +485,7 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -320.0,
+            "x": -338.0,
             "y": 395.0,
             "width": 128.0,
             "height": 94.0
@@ -553,9 +553,9 @@
         "m_Id": "3be692498c1440ef8366070188eb3b79"
     },
     "m_AllowMaterialOverride": false,
-    "m_SurfaceType": 1,
+    "m_SurfaceType": 0,
     "m_ZTestMode": 4,
-    "m_ZWriteControl": 0,
+    "m_ZWriteControl": 1,
     "m_AlphaMode": 0,
     "m_RenderFace": 2,
     "m_AlphaClip": false,
@@ -649,21 +649,21 @@
     "m_Value": {
         "serializedVersion": "2",
         "key0": {
-            "r": 3.128385305404663,
-            "g": 1.6872191429138184,
-            "b": 6.713726043701172,
+            "r": 11.966778755187989,
+            "g": 0.0,
+            "b": 0.0,
             "a": 1.0
         },
         "key1": {
-            "r": 9.011642456054688,
-            "g": 1.8449031114578248,
-            "b": 13.552942276000977,
+            "r": 19.183246612548829,
+            "g": 0.5466696619987488,
+            "b": 0.0,
             "a": 1.0
         },
         "key2": {
-            "r": 14.36862850189209,
-            "g": 2.3320810794830324,
-            "b": 6.093502044677734,
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0,
             "a": 0.0
         },
         "key3": {
@@ -697,8 +697,8 @@
             "a": 0.0
         },
         "ctime0": 0,
-        "ctime1": 33773,
-        "ctime2": 65535,
+        "ctime1": 65535,
+        "ctime2": 0,
         "ctime3": 0,
         "ctime4": 0,
         "ctime5": 0,
@@ -713,7 +713,7 @@
         "atime6": 0,
         "atime7": 0,
         "m_Mode": 0,
-        "m_NumColorKeys": 3,
+        "m_NumColorKeys": 2,
         "m_NumAlphaKeys": 2
     }
 }
