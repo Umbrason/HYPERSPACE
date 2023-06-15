@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class EnemyLaser : MonoBehaviour
 {
-    public float Cooldown;
+    public float Cooldown = 1;
+    public int Damage = 1;
     [SerializeField] private float duration = 1f;
     [SerializeField] private LineRenderer lr;
     [SerializeField] private Transform nozzle;
     [SerializeField] private AnimationCurve laserCurve;
+    [SerializeField] private GameObject laserImpactVFX;
 
     public bool Firing => path != null;
-
-
 
     private Vector2[] path;
     private float pathLength = 0f;
@@ -23,6 +23,7 @@ public class EnemyLaser : MonoBehaviour
         this.pathLength = 0f;
         for (int i = 0; i < path.Length - 1; i++) pathLength += (path[i] - path[i + 1]).magnitude;
         UpdateLaser(path[0]);
+        laserImpactVFX.SetActive(true);
         lr.enabled = true;
     }
 
@@ -33,6 +34,13 @@ public class EnemyLaser : MonoBehaviour
         var t = (Time.time - LaserFireStartTime) / duration;
         var pos = path.SamplePath(Mathf.Clamp01(laserCurve.Evaluate(t)) * pathLength);
         UpdateLaser(pos);
+        var laserTargets = Physics.OverlapSphere(pos, .5f);
+        foreach (var target in laserTargets)
+        {
+            Debug.Log(target);
+            var damageRecievers = target.GetComponentsInParent<IDamageReciever>();
+            foreach (var damageReciever in damageRecievers) damageReciever.OnHit(Damage);
+        }
         if (t >= 1) StopLaser();
     }
 
@@ -43,6 +51,7 @@ public class EnemyLaser : MonoBehaviour
 
     private void StopLaser()
     {
+        laserImpactVFX.SetActive(false);
         lr.enabled = false;
         path = null;
     }
@@ -51,5 +60,6 @@ public class EnemyLaser : MonoBehaviour
     {
         lr.SetPosition(0, nozzle.position);
         lr.SetPosition(1, targetPos);
+        laserImpactVFX.transform.position = targetPos;
     }
 }
