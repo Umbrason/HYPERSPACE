@@ -68,14 +68,14 @@ public class HitFlashRenderFeature : ScriptableRendererFeature
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        renderer.EnqueuePass(pass);
+        renderer.EnqueuePass(pass ??= new(settings));
     }
 
     private HitFlashRenderPass pass;
     public override void Create()
     {
         pass = new HitFlashRenderPass(settings);
-        pass.renderPassEvent = settings.renderPassEvent;
+        
     }
 
     private class HitFlashRenderPass : ScriptableRenderPass, IDisposable
@@ -85,6 +85,7 @@ public class HitFlashRenderFeature : ScriptableRendererFeature
         public HitFlashRenderPass(HitFlashSettings settings)
         {
             this.settings = settings ?? new();
+            this.renderPassEvent = settings.renderPassEvent;
             hitflashBlitMaterial = new Material(Shader.Find("Hitflash/Blit"));
             hitflashBlitMaterial.SetColor("color", settings.color);
         }

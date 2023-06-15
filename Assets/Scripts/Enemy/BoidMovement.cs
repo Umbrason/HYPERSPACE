@@ -4,10 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class BoidMovement : MonoBehaviour
 {
-    public static Dictionary<Guid, BoidMovement> BoidMembers = new();
+    public static Dictionary<int, Dictionary<Guid, BoidMovement>> BoidMembers = new();
     public Vector3 InputTargetPosition { get; set; }
+
+    private Dictionary<Guid, BoidMovement> BoidGroup => BoidMembers.ContainsKey(m_GroupIndex) ? BoidMembers[m_GroupIndex] : BoidMembers[m_GroupIndex] = new();
+    private int m_GroupIndex;
+    public int GroupIndex
+    {
+        get => m_GroupIndex;
+        set
+        {
+            if (m_GroupIndex == value) return;
+            BoidGroup.Remove(boidID);
+            if (BoidMembers[m_GroupIndex].Count == 0) BoidMembers.Remove(m_GroupIndex);
+            m_GroupIndex = value;
+            BoidGroup.Add(boidID, this);
+        }
+    }
+
     public const float boidForceMultiplier = 200f;
     public float Speed = 5f;
 
@@ -15,10 +32,11 @@ public class BoidMovement : MonoBehaviour
     private ITargetPositionModifier[] TargetPositionModifiers => cached_targetPositionModifiers ??= GetComponents<ITargetPositionModifier>();
 
     private Guid boidID = Guid.NewGuid();
-    void OnEnable() => BoidMembers.Add(boidID, this);
-    void OnDisable() => BoidMembers.Remove(boidID);
+    void OnEnable() => BoidGroup.Add(boidID, this);
+    void OnDisable() => BoidGroup.Remove(boidID);
 
-    Rigidbody RB => GetComponent<Rigidbody>();
+    Rigidbody cached_RB;
+    Rigidbody RB => cached_RB ??= GetComponent<Rigidbody>();
     void FixedUpdate()
     {
 
@@ -27,7 +45,7 @@ public class BoidMovement : MonoBehaviour
             targetPosition = modifier.Modify(targetPosition);
 
         var velocity = Vector2.zero;
-        foreach (var boidMember in BoidMembers.Values.Where(boidMember => boidMember != this))
+        foreach (var boidMember in BoidGroup.Values.Where(boidMember => boidMember.boidID != this.boidID))
         {
             var delta = (Vector2)(transform.position - boidMember.transform.position);
             velocity += Mathf.Pow(1f / delta.magnitude, 5f) * delta * boidForceMultiplier * Speed;

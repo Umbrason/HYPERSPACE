@@ -14,7 +14,6 @@ public class Projectile : MonoBehaviour
     {
         var delta = TargetPosition - RB.position;
         RB.velocity = delta.normalized * Speed;
-
         if (Mathf.Abs(RB.position.z - TargetPosition.z) <= Speed * Time.fixedDeltaTime)
         {
             RB.velocity = Vector3.zero;
@@ -22,12 +21,12 @@ public class Projectile : MonoBehaviour
             Destroy(this);
             Destroy(gameObject, .1f + Time.fixedDeltaTime);
         }
-        //if (delta.magnitude <= Speed * Time.fixedDeltaTime) Destroy(gameObject);
     }
 
     public int Damage = 5;
     void OnTriggerEnter(Collider collider)
     {
+        if ((1 << collider.gameObject.layer & LayerMask.GetMask(new[] { "Player" })) != 0) return;
         var parentRecievers = collider.gameObject.GetComponentsInParent<IDamageReciever>();
         var childRecievers = collider.gameObject.GetComponentsInChildren<IDamageReciever>();
         foreach (var reciever in childRecievers.Concat(parentRecievers)) reciever.OnHit(Damage);
