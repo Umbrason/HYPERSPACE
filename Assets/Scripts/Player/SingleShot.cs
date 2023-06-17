@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 [RequireComponent(typeof(PlayerAim))]
 public class SingleShot : MonoBehaviour
@@ -10,6 +11,7 @@ public class SingleShot : MonoBehaviour
     private PlayerAim PlayerAim => cached_PlayerAim ??= GetComponent<PlayerAim>();
 
     [SerializeField] private Projectile ProjectileTemplate;
+    [SerializeField] private AudioSource SFXClip;
     [SerializeField] private Transform[] nozzles = new Transform[0];
 
     private void SetInput(bool value) => Input = value;
@@ -35,6 +37,7 @@ public class SingleShot : MonoBehaviour
 
     private void Shoot()
     {
+        SFXClip.PlayOneShot(SFXClip.clip);
         nozzleIndex = (nozzleIndex + 1) % nozzles.Length;
         var projectileInstance = Instantiate(ProjectileTemplate);
         projectileInstance.transform.position = nozzles[nozzleIndex].position;

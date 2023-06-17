@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class Geometry
@@ -38,5 +40,25 @@ public static class Geometry
             pathIndex++;
         }
         return default;
+    }
+
+    public static Vector2[] RemoveFromStart(this Vector2[] path, float distanceToRemove)
+    {
+        if (path.Length < 2) return path;
+        var queue = new Queue<Vector2>(path);
+        while (distanceToRemove > 0 && queue.Count > 1)
+        {
+            var p = queue.Dequeue();
+            var d = (queue.Peek() - p).magnitude;
+            if (distanceToRemove >= d)
+            {
+                distanceToRemove -= d;
+                continue;
+            }
+            var t = distanceToRemove / d;
+            var p1 = Vector2.Lerp(p, queue.Peek(), t);
+            return queue.Prepend(p1).ToArray();
+        }
+        return queue.ToArray();
     }
 }

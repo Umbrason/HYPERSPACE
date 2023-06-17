@@ -2530,7 +2530,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":1.0,"y":0.20000000298023225,"z":1.0}'
+      m_SerializableObject: '{"x":1.0,"y":0.20000000298023225,"z":0.4000000059604645}'
     m_Space: 2147483647
   m_Property:
     name: HSV
@@ -2825,7 +2825,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 273, y: 625}
+  m_UIPosition: {x: 261, y: 625}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:

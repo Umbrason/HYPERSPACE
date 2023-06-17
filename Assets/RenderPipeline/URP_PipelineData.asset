@@ -70,5 +70,5 @@ MonoBehaviour:
     color:
       serializedVersion: 2
       rgba: 4294967295
-    renderPassEvent: 600
+    renderPassEvent: 1000
     duration: 0.1
