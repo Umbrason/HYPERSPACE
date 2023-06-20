@@ -29,10 +29,29 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: 8839212969401935183}
+  - {fileID: -2601424345331463338}
   m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &-2601424345331463338
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 2fa0123c89ed95a428187b50e41bd1fc
+  m_EffectName: Lowpass
+  m_MixLevel: 87051b3a6c043274d9d00ff848483c77
+  m_Parameters:
+  - m_ParameterName: Cutoff freq
+    m_GUID: 45ffa75ba44618c4487f09d899e0f705
+  - m_ParameterName: Resonance
+    m_GUID: fae0b0b813795f140b25b0f2f6165fa0
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -48,7 +67,9 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 45ffa75ba44618c4487f09d899e0f705
+    name: OSTLowpass
   m_AudioMixerGroupViews:
   - guids:
     - fa459c5f584d2ec42b7517ef5726f9c6
@@ -102,8 +123,21 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 7d68fb7cf1e4a154ea7fe17d7ea87aa8
   m_FloatValues:
+    e89ad861613f5a94695fd25271e8290e: 1.25
+    2ac231a2bcc8ae044af3ded279c8d9a0: 500
     6a9d777315eaac74d8daeae9bbe87b43: -19.928473
-    cb28117830910bd46b7a7049352ceb31: 0
+    8bd785a43066e3b4382016d8712f74fc: 4
+    1088db489cf56f344b2abf5d874a60c1: 0.287
+    cb28117830910bd46b7a7049352ceb31: 8
+    aa9e4d78d4ed6ce4b94e34afb1e01ebd: 21.7
+    0efdfa59299c72247831e232d3ef7a17: 22000
+    45ffa75ba44618c4487f09d899e0f705: 22000
+    1faaf14da136e354ba42bdff02780d19: 0
+    4d64077e1224bf14082bc68be76ee7a0: 688
+    9b6e61ae1e4e2bf4ea00b26c2bef6a0b: 22000
+    3fc36cee30739454da4799c368606567: 0.0139999995
+    1b126b3fb079daf40b5d9c060e669782: -12.7
+    3b2d7f7feb090924783340e13cb887c1: 1734
   m_TransitionOverrides: {}
 --- !u!243 &4283977713787470797
 AudioMixerGroupController:
