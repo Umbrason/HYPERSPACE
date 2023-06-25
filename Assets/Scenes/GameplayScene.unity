@@ -4651,10 +4651,15 @@ MonoBehaviour:
   - {fileID: 1256426980}
   upgradePool:
   - {fileID: 1351091961}
+  - {fileID: 1351091961}
+  - {fileID: 739548072}
+  - {fileID: 739548072}
   - {fileID: 739548072}
   - {fileID: 1377765983}
   - {fileID: 466775071}
   - {fileID: 1769139632}
+  - {fileID: 1769139632}
+  - {fileID: 799994403}
   - {fileID: 799994403}
   - {fileID: 347383149}
   - {fileID: 1144927101}
@@ -6587,7 +6592,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1354658443}
+      - m_Target: {fileID: 1599716188}
         m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
         m_MethodName: Load
         m_Mode: 1
