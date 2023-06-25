@@ -8,7 +8,9 @@ public class ShieldBeamTarget : MonoBehaviour
     public static IReadOnlyList<ShieldBeamTarget> AvailableTargets => m_AvailableTargets;
     public event Action OnRecieveShield;
     public event Action OnLoseShield;
+    public GameObject ShieldVFX;
     private HashSet<Guid> ShieldSources = new();
+
 
 
     void OnEnable()
@@ -25,12 +27,14 @@ public class ShieldBeamTarget : MonoBehaviour
     {
         ShieldSources.Add(guid);
         if (ShieldSources.Count == 1) OnRecieveShield?.Invoke();
+        if (ShieldSources.Count == 1 && ShieldVFX != null) ShieldVFX.SetActive(true);
     }
 
     public void RemoveShieldSource(Guid guid)
     {
         ShieldSources.Remove(guid);
         if (ShieldSources.Count == 0) OnLoseShield?.Invoke();
+        if (ShieldSources.Count == 0 && ShieldVFX != null) ShieldVFX.SetActive(false);
     }
 
 

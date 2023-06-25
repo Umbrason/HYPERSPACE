@@ -61,4 +61,21 @@ public static class Geometry
         }
         return queue.ToArray();
     }
+
+    const float border = .00f;
+    public static (Vector3 min, Vector3 max) ScreenWorldBounds(float distance)
+    {
+        Vector3 MaxCorner = ToWorldPoint(Camera.main.ViewportPointToRay(Vector2.one * (1 - border)), distance);
+        Vector3 MinCorner = ToWorldPoint(Camera.main.ViewportPointToRay(Vector2.one * border), distance);
+        return (MinCorner, MaxCorner);
+    }
+    private static Vector3 ToWorldPoint(Ray ray, float distance)
+    {
+        var cached_MainCam = Camera.main;
+        if (cached_MainCam == null) return ray.origin;
+        Plane p = new(cached_MainCam.transform.forward, Vector3.forward * distance);
+        if (p.Raycast(ray, out float d))
+            return ray.GetPoint(d);
+        return default;
+    }
 }

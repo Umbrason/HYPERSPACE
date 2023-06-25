@@ -7,6 +7,7 @@ public class ShieldBeam : MonoBehaviour
     [SerializeField] private Transform Nozzle;
 
     [SerializeField] private ShieldBeamTarget target;
+    [SerializeField] private Transform Visuals;
 
     private Guid guid = Guid.NewGuid();
 
@@ -16,7 +17,7 @@ public class ShieldBeam : MonoBehaviour
         if (target == null) PickTarget();
         if (target == null) return;
         var delta = Nozzle.position - target.transform.position;
-        transform.up = transform.position - target.transform.position;
+        Visuals.up = Visuals.position - target.transform.position;
         lr.SetPositions(new[] { Nozzle.position, target.transform.position });
         lr.material.SetFloat("_Length", delta.magnitude);
     }
@@ -26,5 +27,10 @@ public class ShieldBeam : MonoBehaviour
         if (ShieldBeamTarget.AvailableTargets.Count == 0) return;
         target = ShieldBeamTarget.AvailableTargets[UnityEngine.Random.Range(0, ShieldBeamTarget.AvailableTargets.Count)];
         target.AddShieldSource(guid);
+    }
+
+    private void OnDestroy()
+    {
+        target.RemoveShieldSource(guid);
     }
 }

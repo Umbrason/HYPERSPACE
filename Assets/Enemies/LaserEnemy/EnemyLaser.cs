@@ -29,6 +29,11 @@ public class EnemyLaser : MonoBehaviour
     private Vector2[] m_path;
     private float m_pathLength;
 
+    void Start()
+    {
+        LaserFireStartTime = Time.fixedTime - FireDuration;
+    }
+
     private bool charging;
     private float LaserTriggerTime;
     private void ChargeLaser()
@@ -50,11 +55,12 @@ public class EnemyLaser : MonoBehaviour
         firing = true;
         LaserFireStartTime = Time.fixedTime;
         laserImpactVFX.SetActive(true);
-
+        lastPos = Path[0];
         lr.enabled = true;
         UpdateLaser();
     }
 
+    private Vector2 lastPos;
     private void UpdateLaser()
     {
         var t = (Time.time - LaserFireStartTime) / FireDuration;
@@ -68,11 +74,13 @@ public class EnemyLaser : MonoBehaviour
         lr.SetPosition(1, pos);
         laserImpactVFX.transform.position = pos;
 
-        //Damage
-        var laserTargets = Physics.OverlapSphere(pos, .5f);
+        //Damage           
+        var dir = pos - lastPos;
+        var laserTargets = Physics.SphereCastAll(lastPos, .5f, dir, dir.magnitude);
+        lastPos = pos;
         foreach (var target in laserTargets)
         {
-            var damageRecievers = target.GetComponentsInParent<IDamageReciever>();
+            var damageRecievers = target.collider.GetEnabledDamageRecievers();
             foreach (var damageReciever in damageRecievers) damageReciever.OnHit(Damage);
         }
         //EndCondition
@@ -100,6 +108,21 @@ public class EnemyLaser : MonoBehaviour
 
     private Vector2[] PickLaserPath()
     {
-        return new Vector2[] { new(-5, 1), new(5, 1) };
+        var horizontal = Random.value >= .5f;
+        (Vector3 screenMin, Vector3 screenMax) = Geometry.ScreenWorldBounds(0);
+        Vector2 start;
+        Vector2 end;
+        switch (horizontal)
+        {
+            case true:
+                start = new(screenMin.x, Random.Range(screenMin.y, screenMax.y));
+                end = new(screenMax.x, Random.Range(screenMin.y, screenMax.y));
+                break;
+            case false:
+                start = new(Random.Range(screenMin.x, screenMax.x), screenMin.y);
+                end = new(Random.Range(screenMin.x, screenMax.x), screenMax.y);
+                break;
+        }
+        return new[] { start, end };
     }
 }

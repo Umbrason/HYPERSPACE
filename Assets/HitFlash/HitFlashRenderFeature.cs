@@ -31,6 +31,7 @@ public class HitFlashRenderFeature : ScriptableRendererFeature
             public Renderer Renderer => smr;
             private SkinnedMeshRenderer smr;
             public Mesh Mesh => smr.sharedMesh;
+            public bool IsDestroyed => smr == null;
             public Material[] Materials => smr.sharedMaterials;
         }
         private class MeshRendererRenderTarget : IRenderTarget
@@ -39,6 +40,7 @@ public class HitFlashRenderFeature : ScriptableRendererFeature
             public Renderer Renderer => mr;
             private MeshFilter mf;
             private MeshRenderer mr;
+            public bool IsDestroyed => mf == null || mr == null;
             public Mesh Mesh => mf.sharedMesh;
             public Material[] Materials => mr.sharedMaterials;
         }
@@ -47,6 +49,7 @@ public class HitFlashRenderFeature : ScriptableRendererFeature
             public Renderer Renderer { get; }
             public Mesh Mesh { get; }
             public Material[] Materials { get; }
+            public bool IsDestroyed { get; }
         }
     }
 
@@ -75,7 +78,7 @@ public class HitFlashRenderFeature : ScriptableRendererFeature
     public override void Create()
     {
         pass = new HitFlashRenderPass(settings);
-        
+
     }
 
     private class HitFlashRenderPass : ScriptableRenderPass, IDisposable
@@ -99,6 +102,7 @@ public class HitFlashRenderFeature : ScriptableRendererFeature
         private RTHandle FlashMaskRT;
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
+            if (renderingData.cameraData.camera.GetUniversalAdditionalCameraData().renderType == CameraRenderType.Overlay) return;
             var camTargetDesc = renderingData.cameraData.cameraTargetDescriptor;
             if (FlashMaskRT == null || FlashMaskRT.rt.width != camTargetDesc.width || FlashMaskRT.rt.height != camTargetDesc.height)
             {
@@ -120,22 +124,23 @@ public class HitFlashRenderFeature : ScriptableRendererFeature
                 cmd.Clear();
                 var hitflash = activeHitFlashes[i];
                 hitflashBlitMaterial.SetFloat("t", (hitflash.startTime - Time.time) / settings.duration);
+                cmd.SetRenderTarget(FlashMaskRT, depth: renderingData.cameraData.renderer.cameraDepthTarget);
+                cmd.ClearRenderTarget(RTClearFlags.Color, new Color(0, 0, 0, 0), 1f, 0);
                 for (int r = 0; r < hitflash.renderTargets.Length; r++)
                 {
                     var renderTarget = hitflash.renderTargets[r];
+                    if (renderTarget.IsDestroyed) continue;
                     var mesh = renderTarget.Mesh;
                     var materials = renderTarget.Materials;
                     for (int m = 0; m < mesh.subMeshCount; m++)
                     {
                         var shaderPass = materials[m].FindPass("ForwardLit");
-                        cmd.SetRenderTarget(FlashMaskRT, depth: renderingData.cameraData.renderer.cameraDepthTarget);
-                        cmd.ClearRenderTarget(RTClearFlags.Color, new Color(0, 0, 0, 0), 1f, 0);
                         cmd.DrawRenderer(renderTarget.Renderer, materials[m], m, shaderPass);
                     }
-                    cmd.Blit(FlashMaskRT, renderingData.cameraData.renderer.cameraColorTarget, mat: hitflashBlitMaterial);
-                    context.ExecuteCommandBuffer(cmd);
-                    cmd.Clear();
                 }
+                cmd.Blit(FlashMaskRT, renderingData.cameraData.renderer.cameraColorTarget, mat: hitflashBlitMaterial);
+                context.ExecuteCommandBuffer(cmd);
+                cmd.Clear();
             }
             context.ExecuteCommandBuffer(cmd);
             cmd.Clear();

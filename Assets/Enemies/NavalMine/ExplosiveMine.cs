@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(BoidMovement), typeof(EnemyMaterialAnimator))]
@@ -7,6 +8,7 @@ public class ExplosiveMine : MonoBehaviour, IDamageReciever
     float Fusetime = .75f;
     float MaxLifetime = 10f;
     float ExplosionRadius = 5f;
+    int ExplosionDamage = 3;
 
     [SerializeField] private GameObject AVFX;
     [SerializeField] private GameObject Debris;
@@ -24,7 +26,7 @@ public class ExplosiveMine : MonoBehaviour, IDamageReciever
     void Start()
     {
         spawnTime = Time.fixedTime;
-        triggerTime = spawnTime + MaxLifetime - Fusetime;
+        triggerTime = spawnTime + (Random.value + 1) * MaxLifetime / 2f - Fusetime;
         spawnLocation = transform.position;
         BoidMovement.GroupIndex = 1;
         BoidMovement.InputTargetPosition = spawnLocation;
@@ -57,6 +59,15 @@ public class ExplosiveMine : MonoBehaviour, IDamageReciever
         Destroy(this);
         AVFX.SetActive(true);
         Debris.SetActive(true);
+
+
+        var targets = Physics.OverlapSphere(transform.position, ExplosionRadius);
+        foreach (var collider in targets)
+        {
+            var damageRecievers = collider.GetEnabledDamageRecievers();
+            foreach (var damageReciever in damageRecievers) damageReciever.OnHit(ExplosionDamage);
+        }
+
         Destroy(Visuals);
         Destroy(gameObject, 2f);
     }

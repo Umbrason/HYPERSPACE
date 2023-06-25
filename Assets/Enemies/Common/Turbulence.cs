@@ -11,7 +11,7 @@ public class Turbulence : MonoBehaviour, ITargetPositionModifier
     public Vector3 Modify(Vector3 target)
     {
         var dx = Mathf.PerlinNoise(seed, Time.time * frequency) - .5f;
-        var dy = Mathf.PerlinNoise(seed, -Time.time * frequency) - .5f;
+        var dy = Mathf.PerlinNoise(seed * 75 + 64325.523f, -Time.time * frequency) - .5f;
         return target + new Vector3(dx, dy) * amplitude * 2f;
     }
 }

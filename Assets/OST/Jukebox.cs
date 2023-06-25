@@ -28,7 +28,7 @@ public class Jukebox : MonoBehaviour
     private void BuildPlaylist()
     {
         if (songs.Length == 0) return;
-        while (playlist?.Peek() == lastSong)
+        while (playlist?.Count == 0 || playlist?.Peek() == lastSong)
             playlist = new(songs.OrderBy(x => Random.value).ToArray());
 
     }

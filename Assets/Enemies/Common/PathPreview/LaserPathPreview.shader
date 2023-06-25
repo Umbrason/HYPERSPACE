@@ -8,6 +8,7 @@ Shader "Unlit/LaserPathPreview"
     {        
         Tags { "RenderType"="Transparent" "Queue" = "Transparent"}
         Blend SrcAlpha OneMinusSrcAlpha
+        ZWrite OFF
         LOD 100
 
         Pass

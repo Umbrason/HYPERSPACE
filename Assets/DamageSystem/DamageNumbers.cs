@@ -8,7 +8,7 @@ public class DamageNumbers : MonoBehaviour
     public AnimationCurve HeightCurve = AnimationCurve.Constant(0, 1, 0);
 
     private static DamageNumbers Instance;
-    void Awake() => DontDestroyOnLoad(Instance = this);
+    void Awake() => Instance = this;
     public TMP_Text textTemplate;
     private ObjectPool<TMP_Text> m_textPool;
     private ObjectPool<TMP_Text> TextPool => m_textPool ??=

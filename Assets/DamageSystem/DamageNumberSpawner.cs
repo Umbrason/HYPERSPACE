@@ -4,5 +4,13 @@ using UnityEngine;
 
 public class DamageNumberSpawner : MonoBehaviour, IDamageReciever
 {
-    public void OnHit(int damage) => DamageNumbers.Spawn(damage, transform.position);
+    int damageThisFrame = 0;
+    public void OnHit(int damage) => damageThisFrame += damage;
+
+    void FixedUpdate()
+    {
+        if (damageThisFrame == 0) return;
+        DamageNumbers.Spawn(damageThisFrame, transform.position);
+        damageThisFrame = 0;
+    }
 }
