@@ -44,3 +44,7 @@ Dodge an overwhealming amount of attacks!
     <td>Toggle Invincibility</td>
   </tr>  
 </table>
+
+# CREDITS
+- SFX/Music: Dark Fantasy Studio
+- Music: Andrew Sitkov - Hard Rock & Heavy Metal Music Pack
